@@ -482,6 +482,13 @@ def container_to_args(compose, cnt, detached=True, podman_command='run'):
     net = cnt.get("network_mode")
     if net:
         podman_args.extend(['--network', net])
+    dns = cnt.get("dns")
+    if dns:
+        if isinstance(dns, str):
+            podman_args.extend(['--dns', dns])
+        if isinstance(dns, list):
+            for dns_server in dns:
+                podman_args.extend(['--dns', dns_server])
     env = norm_as_list(cnt.get('environment', {}))
     for d in cnt.get('devices', []):
         podman_args.extend(['--device', d])
